@@ -10,11 +10,18 @@ const ui = {
 
   async renderizarPensamentos() {
     const listaPensamentos = document.getElementById("lista-pensamentos");
+    const mensagemVazia = document.getElementById("mensagem-vazia");
     listaPensamentos.innerHTML = "";
 
     try {
       const pensamentos = await api.buscarPensamentos();
       pensamentos.forEach(ui.adicionarPensamentoNaLista);
+      if (pensamentos.length === 0) {
+        mensagemVazia.style.display = "block";
+      } else {
+        mensagemVazia.style.display = "none";
+        pensamentos.forEach(ui.adicionarPensamentoNaLista);
+      }
     } catch {
       alert("Não foi possível renderizar os pensamentos.");
     }
@@ -23,6 +30,7 @@ const ui = {
   adicionarPensamentoNaLista(pensamento) {
     const listaPensamentos = document.getElementById("lista-pensamentos");
     const li = document.createElement("li");
+
     li.setAttribute("data-id", pensamento.id);
     li.classList.add("li-pensamento");
 
